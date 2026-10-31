@@ -33,7 +33,10 @@ if (badPaths.length) {
   console.log('✓ 路径红线：无 PDF / 教材页图 / 答案册 / 发布目录 / 构建产物');
 }
 
-/* ② 内容红线：文件里有没有引用教材 PDF 的**链接**（不是文件本身） */
+/* ② 内容红线：文件里有没有引用教材 PDF 的**链接**（不是文件本身）
+   ⚠ 必须用 `git show HEAD:<path>` 读**提交对象**里的内容 ——
+     用工作区文件会读到「已被 .gitignore 排除、根本没入库」的文件，
+     造成假报警（根 index.html 就是这种：本地版教材目录页，不入库）。 */
 const suspectLink = [];
 for (const f of files) {
   if (!/\.(md|html|js|json)$/i.test(f)) continue;
