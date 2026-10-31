@@ -210,6 +210,7 @@ node build/publish.js                # ⑨（可选）组装公网发布目录 s
 | 多个验收脚本**并发**跑抢静态服务器端口 | `check_mobile_width.js` 等各自 `spawn` 一个 `serve.js`（默认端口固定）→ 后启动的抢不到端口 → 批量报「未能取到测量结果（页面可能未加载）」，**看着像页面坏了其实不是** | 验收脚本**串行**跑；要并行就各给一个 `VERIFY_PORT`；报「页面可能未加载」时先查进程：`Get-CimInstance Win32_Process -Filter "Name='node.exe'"` |
 | `VERIFY_PORT` 选的端口**已被别的服务占用** | 症状同上：端口被占 → `serve.js` 起不来 → iframe 加载的是**别人的服务** → 全页「页面可能未加载」 | 选端口前先查：`Get-NetTCPConnection -State Listen \| Where LocalPort -ge 18076`；本机常见占用：18076（本工程预览）、18077（通信电路）、18078、**18098（小红书 MCP 的 `tools/serve.js`）** |
 | `check_online.js` 遇到大文件就**静默卡住** | 原实现为了省流量，在响应流超过 400 KB 时 `res.destroy()`，但 `resolve` 只挂在 `'end'` 事件上 → destroy 后 `end` 不触发 → 该请求**永远不返回** → 脚本停在那一个文件上（症状：只输出前几个 URL 就没了，**看起来像"线上只有几个文件"**） | 不要在中途 destroy 响应流；要么读完整个流，要么同时监听 `'close'`/`'error'` 并保证只 resolve 一次（已修）。判据：**输出行数应等于本地文件数**，少于它就是卡住了，不是线上缺文件 |
+| PortableGit 的 `helper-selector` 拦在凭据链最前 | 全局 `~/.gitconfig` 里有 `credential.helperselector.selected=manager` → `git push` 弹「CredentialHelperSelector」选择窗口**卡住不返回**；且 `git config --global --get-all credential.helper` **查不到它**（它不是 helper 项） | 本仓库 `.git/config` 里显式写 `credential.helper = <GCM绝对路径>`；若仍被弹窗，用 `GIT_CONFIG_GLOBAL=<临时配置文件>` 隔离全局配置再推（不改全局）。PortableGit 的 GCM 在 `mingw64/bin/git-credential-manager.exe`（2.7.3 可用）；`gh` CLI 本机没装 |
 
 ## 12. worker 可做 / 不可做
 
