@@ -1,0 +1,113 @@
+﻿<!DOCTYPE html>
+<html lang="zh-CN"><head><meta charset="utf-8"><title>PROBE3_DONE</title></head>
+<body>
+<pre id="out">=== ① 窄屏 390px ===
+innerWidth=390  clientWidth=375
+图宽（显示）= 800px   viewBox=0 0 800 210
+图内文字「信源」渲染高度 = 13.00px
+已包 .figwrap = 是   is-scroll = 是
+横滑容器可视宽=800px  内容宽=800px  可横滑=true
+提示条：← 左右滑动查看完整图形 · 点图可全屏放大 →全屏放大
+页面级横向溢出 = false（应为 false）
+表格已包 .tbl-wrap = 0 / 表格总数 0
+该图有交互热区(data-*) = 无
+点图后灯箱状态 = 已打开 ✓
+灯箱内 svg = 已克隆 ✓ 宽390px
+
+=== ② 桌面 1280px（零回归检查）===
+innerWidth=1280
+图宽（显示）= 926px  （改造前也是这个值 → 零回归）
+图内文字渲染高度 = 15.00px
+.figwrap 数量 = 0（应为 0：视口够宽不包裹）
+页面级横向溢出 = false</pre>
+<iframe id="fr" style="width:390px;height:800px;border:1px solid #ccc" src="/viz/%E5%8E%9F%E7%90%86%E8%AE%B2%E8%A7%A3_4.0_%E4%BF%A1%E9%81%93%E7%9A%84%E5%AE%9A%E4%B9%89%E4%B8%8E%E5%88%86%E7%B1%BB_%E5%8F%AF%E8%A7%86%E5%8C%96.html"></iframe>
+<script>
+/* 验收：测「已集成 mobile.js 的真实页面」
+   ① 390px 窄屏：宽图是否 1:1、文字是否可读、能否横滑、灯箱能否打开
+   ② 1280px 桌面：是否零回归（不包裹、图宽与改造前一致） */
+window.addEventListener('load', function () {
+  var NAME = '原理讲解_4.0_信道的定义与分类_可视化.html';
+  var fr = document.getElementById('fr');
+  fr.src = '/viz/' + encodeURIComponent(NAME);
+  setTimeout(function () {
+   try {
+    var L = [];
+    var doc = fr.contentDocument, win = fr.contentWindow;
+    function firstText(svg) {
+      var t = svg.querySelector('text');
+      if (!t) return null;
+      var r = t.getBoundingClientRect();
+      return { h: r.height, s: t.textContent };
+    }
+    function hotspot(svg) {
+      var els = svg.querySelectorAll('*'), has = false;
+      for (var i = 0; i < els.length && !has; i++) {
+        var a = els[i].attributes;
+        if (!a) continue;
+        for (var j = 0; j < a.length; j++) if (a[j].name.indexOf('data-') === 0) { has = true; break; }
+      }
+      return has;
+    }
+
+    L.push('=== ① 窄屏 390px ===');
+    L.push('innerWidth=' + win.innerWidth + '  clientWidth=' + doc.documentElement.clientWidth);
+    var svg = doc.getElementById('sysmap');
+    var t1 = firstText(svg);
+    var wrap = doc.querySelector('.figwrap');
+    L.push('图宽（显示）= ' + Math.round(svg.getBoundingClientRect().width) + 'px   viewBox=0 0 800 210');
+    L.push('图内文字「' + t1.s + '」渲染高度 = ' + t1.h.toFixed(2) + 'px');
+    L.push('已包 .figwrap = ' + (wrap ? '是' : '否') + '   is-scroll = ' +
+      (wrap && wrap.className.indexOf('is-scroll') >= 0 ? '是' : '否'));
+    if (wrap) {
+      var box = wrap.querySelector('.fig');
+      L.push('横滑容器可视宽=' + Math.round(box.getBoundingClientRect().width) +
+        'px  内容宽=' + box.scrollWidth + 'px  可横滑=' + (box.scrollWidth > box.clientWidth + 1));
+      var hint = wrap.querySelector('.fighint');
+      L.push('提示条：' + (hint ? hint.textContent.trim() : '(无)'));
+    }
+    L.push('页面级横向溢出 = ' + (doc.documentElement.scrollWidth > doc.documentElement.clientWidth + 1) + '（应为 false）');
+    L.push('表格已包 .tbl-wrap = ' + doc.querySelectorAll('.tbl-wrap table').length + ' / 表格总数 ' + doc.querySelectorAll('table').length);
+    L.push('该图有交互热区(data-*) = ' + (hotspot(svg) ? '有' : '无'));
+
+    /* 点图 → 灯箱 */
+    var ev = new win.MouseEvent('click', { bubbles: true, cancelable: true });
+    svg.dispatchEvent(ev);
+    var lb = doc.getElementById('mvis-lb');
+    L.push('点图后灯箱状态 = ' + (lb ? (lb.className.indexOf('on') >= 0 ? '已打开 ✓' : '未打开（交互图，不劫持）') : '无灯箱'));
+    if (lb && lb.className.indexOf('on') >= 0) {
+      var zs = lb.querySelector('.mvis-lb-zoom > svg');
+      L.push('灯箱内 svg = ' + (zs ? '已克隆 ✓ 宽' + Math.round(zs.getBoundingClientRect().width) + 'px' : '缺'));
+    }
+
+    L.push('');
+    L.push('=== ② 桌面 1280px（零回归检查）===');
+    var fr2 = document.createElement('iframe');
+    fr2.style.width = '1280px'; fr2.style.height = '800px'; fr2.style.border = '1px solid #ccc';
+    document.body.appendChild(fr2);
+    fr2.src = '/viz/' + encodeURIComponent(NAME);
+    fr2.onload = function () {
+      setTimeout(function () {
+        try {
+          var d2 = fr2.contentDocument;
+          var s2 = d2.getElementById('sysmap');
+          var t2 = firstText(s2);
+          L.push('innerWidth=' + fr2.contentWindow.innerWidth);
+          L.push('图宽（显示）= ' + Math.round(s2.getBoundingClientRect().width) + 'px  （改造前也是这个值 → 零回归）');
+          L.push('图内文字渲染高度 = ' + t2.h.toFixed(2) + 'px');
+          L.push('.figwrap 数量 = ' + d2.querySelectorAll('.figwrap').length + '（应为 0：视口够宽不包裹）');
+          L.push('页面级横向溢出 = ' + (d2.documentElement.scrollWidth > d2.documentElement.clientWidth + 1));
+        } catch (e) { L.push('桌面测量异常：' + e.message); }
+        document.getElementById('out').textContent = L.join('\n');
+        document.title = 'PROBE3_DONE';
+      }, 1200);
+    };
+   } catch (e) {
+    document.getElementById('out').textContent = 'ERROR: ' + e.message + '\n' + String(e.stack||'').split('\n').slice(0,4).join('\n');
+    document.title = 'PROBE3_ERR';
+   }
+  }, 1500);
+});
+</script>
+
+
+<iframe src="/viz/%E5%8E%9F%E7%90%86%E8%AE%B2%E8%A7%A3_4.0_%E4%BF%A1%E9%81%93%E7%9A%84%E5%AE%9A%E4%B9%89%E4%B8%8E%E5%88%86%E7%B1%BB_%E5%8F%AF%E8%A7%86%E5%8C%96.html" style="width: 1280px; height: 800px; border: 1px solid rgb(204, 204, 204);"></iframe></body></html>

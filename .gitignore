@@ -1,0 +1,52 @@
+# ============================================================================
+#  zjnu-visual-lectures —— 浙师大《通信原理》/《通信电子线路》可视化讲义
+#  本仓库只收「源码工程」：讲义片段、构建器、验收闸门、发布脚本。
+#
+#  ⚠ gitignore **不支持行尾注释** —— 写成 `site/   # 说明` 会让整行（含中文）
+#    被当成一个模式，规则直接失效。注释必须单独占一行。
+# ============================================================================
+
+# --- 版权红线：教材 / 课件 / 答案册 扫描件与页图，一律不入库 ---
+# docs/ = 教材与课件 PDF（13 个文件 / 122.7 MB）
+# build/pages/ = 教材页图渲染（493 张 / 64.7 MB）
+# build/examples/ = 答案册页图
+docs/
+build/pages/
+build/examples/
+*.pdf
+
+# --- 构建产物与发布目录 ---
+# site/ = 发布目录（199 文件 / 52.3 MB，由 node build/publish.js 生成）
+# viz/ = 构建输出（由 node build/build.js 生成）
+site/
+viz/
+*.log
+
+# --- 脚本中间产物 / 截图 / 诊断输出 ---
+scratch/_*.html
+scratch/_*.txt
+scratch/_*.json
+scratch/shot_*.png
+scratch/diag_*.png
+scratch/*.out.txt
+scratch/pilot_*.png
+scratch/phone_view*.png
+scratch/mobile_*.png
+scratch/*_shot.png
+
+# --- 编辑器与系统 ---
+node_modules/
+.obsidian/
+.DS_Store
+Thumbs.db
+.idea/
+.vscode/
+*.swp
+
+# ⚠ 根目录的旧章节整页（第4~7章-*.html）是**另一门课**的产物，
+#   它们直接被 publish.js 发布、不经本仓库的构建流程 —— 属于「上游成品」，
+#   默认不入库；如需自行构建这些整页，请从各自工程取源文件。
+第4章-信道-可视化讲解.html
+第5章-模拟调制系统-可视化讲解.html
+第6章-数字基带传输系统-可视化讲解.html
+第7章-数字带通传输系统-可视化讲解.html

@@ -1,0 +1,69 @@
+<section id="s1">
+  <div class="sec-head"><span class="sec-num">§ 4.0</span><h2>信道的定义与分类</h2></div>
+  <p class="sec-sub">按教材的定义：<b>信道</b>是连接发送端和接收端的通信设备，其功能是将信号从发送端传送到接收端。
+    这一章要建立两套"账本"——<b>信道的物理特性</b>（会怎样伤害信号）和<b>信道的容量</b>（最多能传多少比特）。</p>
+
+  <div class="purpose">
+    <div class="card"><div class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M4 12h16"/><path d="M8 8l4 4-4 4"/></svg></div>
+      <b>按传输介质</b><p>无线信道（自由空间 / 大气层）与有线信道（明线、电缆、光纤）。</p></div>
+    <div class="card"><div class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M3 12h4l3 8 4-16 3 8h4"/></svg></div>
+      <b>按信道特性</b><p>恒定参量信道（恒参）与随机参量信道（随参），决定了失真的性质。</p></div>
+    <div class="card"><div class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M3 6h18M3 12h18M3 18h12"/></svg></div>
+      <b>按噪声作用方式</b><p>加性噪声（与信号叠加）与乘性干扰（与信号相乘）。</p></div>
+    <div class="card"><div class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="12" cy="12" r="9"/><path d="M12 8v4l3 2"/></svg></div>
+      <b>按信号类型</b><p>连续（模拟）信道与离散（数字）信道，容量公式完全不同。</p></div>
+  </div>
+
+  <h3><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M4 7h16M4 12h16M4 17h10"/></svg>狭义信道与广义信道</h3>
+  <div class="grid2">
+    <div class="card">
+      <h4>狭义信道 = 传输媒质</h4>
+      <p>只指中间那段"路"本身：有线信道（明线、电缆、光纤）、无线信道（自由空间或大气层）。</p>
+      <p class="derivation">无线广播、无线电视、卫星通信、雷达都靠无线信道；光信号则可以走光波导，也可以走光纤。</p>
+    </div>
+    <div class="card">
+      <h4>广义信道 = 一整条"通路"</h4>
+      <p>把调制器/解调器等设备也划进来，按研究对象分两种：</p>
+      <ul class="kv" style="margin-top:6px">
+        <li><span class="k">调制信道</span><span>从<b>调制器输出端</b>到<b>解调器输入端</b>。研究<b>调制 / 解调</b>问题。</span></li>
+        <li><span class="k">编码信道</span><span>从<b>编码器输出端</b>到<b>译码器输入端</b>。研究<b>编码 / 译码</b>问题。</span></li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="card">
+    <svg class="chart" id="sysmap" viewBox="0 0 800 210"></svg>
+    <div class="cap">
+      <b>图 1　通信系统框图中的两个"广义信道"。</b>
+      蓝色实线框内是<b>调制信道</b>（数字调制器输出 → 数字解调器输入），橙色虚线框内是<b>编码信道</b>（信道编码器输出 → 信道译码器输入）。
+      本章的 4.3 节分别给出这两个模型的数学描述：调制信道用<b>冲激响应 + 噪声</b>刻画，编码信道用<b>转移概率</b>刻画。
+    </div>
+  </div>
+
+  <div class="callout key">
+    <span class="ct">一句话记住</span>
+    狭义信道看的是"<b>介质</b>"，广义信道看的是"<b>你打算解决什么问题</b>"。
+    同一段物理线路，既可以当调制信道（研究误码率），也可以当编码信道（研究转移概率）。
+  </div>
+</section>
+
+<script>
+/* §4.0 启动：本节只画通信系统框图 */
+if (window.__CH) window.__CH.wSysMap();
+
+/* ===== 页末自检（§4.0 信道的定义与分类） =====
+   本节为定性节，无编号公式；自检 = 结构完整性 + 教材口径对撞 + 页面渲染回读。 */
+(function(){
+  var out = [], ok = true;
+  function t(name, cond, extra){ out.push((cond ? "PASS" : "FAIL") + "  " + name + (extra ? "  " + extra : "")); if(!cond) ok = false; }
+  var map = document.getElementById("sysmap");
+  t("通信系统框图已渲染", !!map && map.childNodes.length > 0, "children=" + (map ? map.childNodes.length : 0));
+  t("分类卡片 4 张（介质/特性/噪声/信号）", document.querySelectorAll(".purpose .card").length === 4);
+  var kv = document.querySelector("ul.kv");
+  t("调制信道与编码信道定义齐全", !!kv && /调制信道/.test(kv.textContent) && /编码信道/.test(kv.textContent));
+  t("狭义/广义信道双卡并列", document.querySelectorAll(".grid2 .card").length >= 2);
+  t("教材口径：信道=连接收发端的通信设备", /连接发送端和接收端的通信设备/.test(document.body.textContent));
+  console.log(out.join("\n"));
+  document.title += (ok ? " \u2713" : " \u2717");
+})();
+</script>

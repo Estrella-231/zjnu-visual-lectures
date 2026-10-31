@@ -1,0 +1,191 @@
+{
+  "00_Baguan-solar": {
+    "arxivId": "2603.14845",
+    "arxivVersion": "v3",
+    "title": "Integrating Weather Foundation Model and Satellite to Enable Fine-Grained Solar Irradiance Forecasting",
+    "authors": "Ziqing Ma, Kai Ying, Xinyue Gu, Tian Zhou, Tianyu Zhu, Haifan Zhang, Peisong Niu, Zheng Wang, Cong Bai, Liang Sun",
+    "licenseKey": "CC BY-NC-ND 4.0",
+    "licenseName": "CC BY-NC-ND 4.0（非商业 + 禁改 + 署名）",
+    "licenseUrl": "https://creativecommons.org/licenses/by-nc-nd/4.0/",
+    "sourceUrl": "https://arxiv.org/abs/2603.14845"
+  },
+  "00_SolarCrossFormer": {
+    "arxivId": "2509.15827",
+    "arxivVersion": "v2",
+    "title": "SolarCrossFormer: Improving day-ahead Solar Irradiance Forecasting by Integrating Satellite Imagery and Ground Sensors",
+    "authors": "Baptiste Schubnel, Jelena Simeunović, Corentin Tissier, Pierre-Jean Alet, Rafael E. Carrillo",
+    "licenseKey": "CC BY-NC-ND 4.0",
+    "licenseName": "CC BY-NC-ND 4.0（非商业 + 禁改 + 署名）",
+    "licenseUrl": "https://creativecommons.org/licenses/by-nc-nd/4.0/",
+    "sourceUrl": "https://arxiv.org/abs/2509.15827"
+  },
+  "01_SolarSeer": {
+    "arxivId": "2508.03590",
+    "arxivVersion": "v2",
+    "title": "SolarSeer: Ultrafast and accurate 24-hour solar irradiance forecasts outperforming numerical weather prediction across the USA",
+    "authors": "Mingliang Bai, Zuliang Fang, Shengyu Tao, Siqi Xiang, Jiang Bian, Yanfei Xiang, Pengcheng Zhao, Weixin Jin, Jonathan A. Weyn, Haiyu Dong, Bin Zhang, Hongyu Sun, Kit Thambiratnam, Qi Zhang, Hongbin Sun, Xuan Zhang, Qiuwei Wu",
+    "licenseKey": "arXiv nonexclusive-distrib",
+    "licenseName": "arXiv 永久非独占许可（允许再分发）",
+    "licenseUrl": "http://arxiv.org/licenses/nonexclusive-distrib/1.0/",
+    "sourceUrl": "https://arxiv.org/abs/2508.03590"
+  },
+  "02_NICEk_Metrics": {
+    "arxivId": "2508.01457",
+    "arxivVersion": "v1",
+    "title": "NICE^k Metrics: Unified and Multidimensional Framework for Evaluating Deterministic Solar Forecasting Accuracy",
+    "authors": "Cyril Voyant, Milan Despotovic, Luis Garcia-Gutierrez, Rodrigo Amaro e Silva, Philippe Lauret, Ted Soubdhan, Nadjem Bailek",
+    "licenseKey": "CC BY-NC-ND 4.0",
+    "licenseName": "CC BY-NC-ND 4.0（非商业 + 禁改 + 署名）",
+    "licenseUrl": "https://creativecommons.org/licenses/by-nc-nd/4.0/",
+    "sourceUrl": "https://arxiv.org/abs/2508.01457"
+  },
+  "03_Ensemble_PostProcess_PV": {
+    "arxivId": "2508.15508",
+    "arxivVersion": "v1",
+    "title": "Post-processing of ensemble photovoltaic power forecasts with distributional and quantile regression methods",
+    "authors": "Martin János Mayer, Ágnes Baran, Sebastian Lerch, Nina Horat, Dazhi Yang, Sándor Baran",
+    "licenseKey": "arXiv nonexclusive-distrib",
+    "licenseName": "arXiv 永久非独占许可（允许再分发）",
+    "licenseUrl": "http://arxiv.org/licenses/nonexclusive-distrib/1.0/",
+    "sourceUrl": "https://arxiv.org/abs/2508.15508"
+  },
+  "04_CEEMDAN_UltraShort_PV": {
+    "arxivId": "2509.17095",
+    "arxivVersion": "v1",
+    "title": "Ultra-short-term solar power forecasting by deep learning and data reconstruction",
+    "authors": "Jinbao Wang, Jun Liu, Shiliang Zhang, Xuehui Ma",
+    "licenseKey": "CC BY-NC-ND 4.0",
+    "licenseName": "CC BY-NC-ND 4.0（非商业 + 禁改 + 署名）",
+    "licenseUrl": "https://creativecommons.org/licenses/by-nc-nd/4.0/",
+    "sourceUrl": "https://arxiv.org/abs/2509.17095"
+  },
+  "05_SolarBoost": {
+    "arxivId": "2510.21129",
+    "arxivVersion": "v1",
+    "title": "SolarBoost: Distributed Photovoltaic Power Forecasting Amid Time-varying Grid Capacity",
+    "authors": "Linyuan Geng, Linxiao Yang, Xinyue Gu, Liang Sun",
+    "licenseKey": "arXiv nonexclusive-distrib",
+    "licenseName": "arXiv 永久非独占许可（允许再分发）",
+    "licenseUrl": "http://arxiv.org/licenses/nonexclusive-distrib/1.0/",
+    "sourceUrl": "https://arxiv.org/abs/2510.21129"
+  },
+  "06_Federated_Microgrid": {
+    "arxivId": "2511.17968",
+    "arxivVersion": "v1",
+    "title": "Uncertainty-Aware Federated Learning for Cyber-Resilient Microgrid Energy Management",
+    "authors": "Oluleke Babayomi, Dong-Seong Kim",
+    "licenseKey": "CC BY-NC-SA 4.0",
+    "licenseName": "CC BY-NC-SA 4.0（非商业 + 相同方式共享 + 署名）",
+    "licenseUrl": "https://creativecommons.org/licenses/by-nc-sa/4.0/",
+    "sourceUrl": "https://arxiv.org/abs/2511.17968"
+  },
+  "07_AQ_RNN_MultiRegional": {
+    "arxivId": "2602.05660",
+    "arxivVersion": "v1",
+    "title": "Probabilistic Multi-Regional Solar Power Forecasting with Any-Quantile Recurrent Neural Networks",
+    "authors": "Slawek Smyl, Paweł Pełka, Grzegorz Dudek",
+    "licenseKey": "CC BY-NC-ND 4.0",
+    "licenseName": "CC BY-NC-ND 4.0（非商业 + 禁改 + 署名）",
+    "licenseUrl": "https://creativecommons.org/licenses/by-nc-nd/4.0/",
+    "sourceUrl": "https://arxiv.org/abs/2602.05660"
+  },
+  "08_Meteo_SkyImages_PV": {
+    "arxivId": "2602.15782",
+    "arxivVersion": "v1",
+    "title": "Meteorological data and Sky Images meets Neural Models for Photovoltaic Power Forecasting",
+    "authors": "Ines Montoya-Espinagosa, Antonio Agudo",
+    "licenseKey": "arXiv nonexclusive-distrib",
+    "licenseName": "arXiv 永久非独占许可（允许再分发）",
+    "licenseUrl": "http://arxiv.org/licenses/nonexclusive-distrib/1.0/",
+    "sourceUrl": "https://arxiv.org/abs/2602.15782"
+  },
+  "09_CAPE_CloudEdge_PV": {
+    "arxivId": "2603.22343",
+    "arxivVersion": "v2",
+    "title": "Cloud-Edge Collaborative Large Models for Robust Photovoltaic Power Forecasting",
+    "authors": "Nan Qiao, Shuning Wang, Sijing Duan, Wenpeng Cui, Yuzhe Chen, Qingchen Yang, Xingyuan Hua, Ju Ren",
+    "licenseKey": "CC BY 4.0",
+    "licenseName": "CC BY 4.0（署名）",
+    "licenseUrl": "https://creativecommons.org/licenses/by/4.0/",
+    "sourceUrl": "https://arxiv.org/abs/2603.22343"
+  },
+  "10_Solar_VLM": {
+    "arxivId": "2604.04145",
+    "arxivVersion": "v1",
+    "title": "Solar-VLM: Multimodal Vision-Language Models for Augmented Solar Power Forecasting",
+    "authors": "Hang Fan, Haoran Pei, Runze Liang, Weican Liu, Long Cheng, Wei Wei",
+    "licenseKey": "arXiv nonexclusive-distrib",
+    "licenseName": "arXiv 永久非独占许可（允许再分发）",
+    "licenseUrl": "http://arxiv.org/licenses/nonexclusive-distrib/1.0/",
+    "sourceUrl": "https://arxiv.org/abs/2604.04145"
+  },
+  "11_PISSM_OffGrid": {
+    "arxivId": "2111.00396",
+    "arxivVersion": null,
+    "title": "Efficiently Modeling Long Sequences with Structured State Spaces",
+    "authors": "Albert Gu, Karan Goel, Christopher Ré",
+    "licenseKey": "arXiv nonexclusive-distrib",
+    "licenseName": "arXiv 永久非独占许可（允许再分发）",
+    "licenseUrl": "http://arxiv.org/licenses/nonexclusive-distrib/1.0/",
+    "sourceUrl": "https://arxiv.org/abs/2111.00396"
+  },
+  "12_PhysicsGuided_CNN_BiLSTM": {
+    "arxivId": "1503.02531",
+    "arxivVersion": null,
+    "title": "Distilling the Knowledge in a Neural Network",
+    "authors": "Geoffrey Hinton, Oriol Vinyals, Jeff Dean",
+    "licenseKey": "arXiv nonexclusive-distrib",
+    "licenseName": "arXiv 永久非独占许可（允许再分发）",
+    "licenseUrl": "http://arxiv.org/licenses/nonexclusive-distrib/1.0/",
+    "sourceUrl": "https://arxiv.org/abs/1503.02531"
+  },
+  "13_Barrier_MOO_Interval": {
+    "arxivId": "2604.18492",
+    "arxivVersion": "v1",
+    "title": "Barrier-enforced multi-objective optimization for direct point and sharp interval forecasting",
+    "authors": "Worachit Amnuaypongsa, Yotsapat Suparanonrat, Pana Wanitchollakit, Jitkomut Songsiri",
+    "licenseKey": "CC BY-NC-ND 4.0",
+    "licenseName": "CC BY-NC-ND 4.0（非商业 + 禁改 + 署名）",
+    "licenseUrl": "https://creativecommons.org/licenses/by-nc-nd/4.0/",
+    "sourceUrl": "https://arxiv.org/abs/2604.18492"
+  },
+  "14_SolarTformer": {
+    "arxivId": "2604.24306",
+    "arxivVersion": "v1",
+    "title": "SolarTformer: A Transformer Based Deep Learning Approach for Short Term Solar Power Forecasting",
+    "authors": "Ankan Basu, Jyotiraditya Roy, Aditya Datta, Prayas Sanyal, Sumanta Banerjee",
+    "licenseKey": "arXiv nonexclusive-distrib",
+    "licenseName": "arXiv 永久非独占许可（允许再分发）",
+    "licenseUrl": "http://arxiv.org/licenses/nonexclusive-distrib/1.0/",
+    "sourceUrl": "https://arxiv.org/abs/2604.24306"
+  },
+  "15_StepAdaptive_Fusion": {
+    "arxivId": "2606.06102",
+    "arxivVersion": "v1",
+    "title": "Step-adaptive multimodal fusion network with multi-scale cloud feature learning for ultra-short-term solar irradiance forecasting",
+    "authors": "Jingxin Zhang Xiaoqin Wang",
+    "licenseKey": "CC BY 4.0",
+    "licenseName": "CC BY 4.0（署名）",
+    "licenseUrl": "https://creativecommons.org/licenses/by/4.0/",
+    "sourceUrl": "https://arxiv.org/abs/2606.06102"
+  },
+  "16_QuantumML_PV": {
+    "arxivId": "2312.16379",
+    "arxivVersion": "v3",
+    "title": "Photovoltaic power forecasting using quantum machine learning",
+    "authors": "Asel Sagingalieva, Stefan Komornyik, Arsenii Senokosov, Ayush Joshi, Christopher Mansell, Olga Tsurkan, Karan Pinto, Markus Pflitsch, Alexey Melnikov",
+    "licenseKey": "CC BY 4.0",
+    "licenseName": "CC BY 4.0（署名）",
+    "licenseUrl": "https://creativecommons.org/licenses/by/4.0/",
+    "sourceUrl": "https://arxiv.org/abs/2312.16379"
+  },
+  "17_NatComm_CloudCover_Nowcast": {
+    "arxivId": null,
+    "title": null,
+    "authors": null,
+    "licenseKey": "CC BY 4.0",
+    "licenseName": "CC BY 4.0（署名）",
+    "licenseUrl": "https://creativecommons.org/licenses/by/4.0/",
+    "sourceUrl": "https://www.nature.com/articles/s41467-023-44666-1"
+  }
+}

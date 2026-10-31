@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<title>mobile probe 2</title>
+</head>
+<body>
+<pre id="out">running…</pre>
+<iframe id="fr" style="width:390px;height:700px;border:1px solid #ccc"></iframe>
+<script>
+/* 验证：只加一段运行时 JS（不改任何页面源码）+ 一段 CSS，
+   能不能把宽图从「缩到 3.4px」救回可读。 */
+window.addEventListener('load', function () {
+  var NAME = '原理讲解_4.0_信道的定义与分类_可视化.html';
+  document.getElementById('fr').src = '/viz/' + encodeURIComponent(NAME);
+  setTimeout(function () {
+   try {
+    var fr = document.getElementById('fr');
+    var doc = fr.contentDocument, win = fr.contentWindow;
+    var L = [];
+    function textBox(svg) {           /* 取图里第一个 <text> 的渲染高度（含 viewBox 缩放） */
+      var t = svg.querySelector('text');
+      if (!t) return null;
+      var r = t.getBoundingClientRect();
+      return { h: r.height, s: t.textContent };
+    }
+    var svg = doc.getElementById('sysmap');
+    L.push('=== 改之前 ===');
+    L.push('视口宽 = ' + win.innerWidth + '  页面无横向溢出 = ' +
+      (doc.documentElement.scrollWidth <= doc.documentElement.clientWidth + 1));
+    var b4 = textBox(svg);
+    L.push('框图显示宽 = ' + Math.round(svg.getBoundingClientRect().width) + 'px');
+    L.push('框图里文字「' + b4.s + '」渲染高度 = ' + b4.h.toFixed(2) + 'px  ← 肉眼可读下限约 9px');
+
+    /* ---- 施加方案：运行时包一层 .fig（横滑容器）+ 给 svg 设 min-width ---- */
+    var st = doc.createElement('style');
+    st.textContent =
+      '.fig{overflow-x:auto;overflow-y:hidden;-webkit-overflow-scrolling:touch;' +
+      'margin:10px 0;border-radius:8px;background:#fff;}' +
+      '.fig>svg{width:auto;min-width:720px;max-width:none;display:block;}' +
+      '.fig::after{content:"← 左右滑动查看完整图形 →";display:block;font-size:12px;' +
+      'color:#6b6b6b;text-align:center;padding:4px 0 6px;}';
+    doc.head.appendChild(st);
+    var svgs = doc.querySelectorAll('svg');
+    var wrapped = 0;
+    for (var i = 0; i < svgs.length; i++) {
+      var s = svgs[i];
+      var vb = s.getAttribute('viewBox');
+      if (!vb) continue;
+      var p = vb.trim().split(/\s+/);
+      if (p.length < 4) continue;
+      if (parseFloat(p[2]) < 560) continue;         /* 只处理宽图 */
+      var d = doc.createElement('div');
+      d.className = 'fig';
+      s.parentNode.insertBefore(d, s);
+      d.appendChild(s);
+      wrapped++;
+    }
+    L.push('');
+    L.push('=== 改之后（运行时注入，未改页面源码）===');
+    L.push('已包裹宽图 = ' + wrapped + ' 张');
+    var af = svg.closest('.fig');
+    var b5 = textBox(svg);
+    L.push('框图显示宽 = ' + Math.round(svg.getBoundingClientRect().width) + 'px');
+    L.push('框图里文字渲染高度 = ' + b5.h.toFixed(2) + 'px');
+    L.push('横滑容器可视宽 = ' + Math.round(af.getBoundingClientRect().width) +
+      'px  内容宽 = ' + af.scrollWidth + 'px  → 可横滑 = ' + (af.scrollWidth > af.clientWidth + 1));
+    L.push('页面横向溢出 = ' + (doc.documentElement.scrollWidth > doc.documentElement.clientWidth + 1) + '（应为 false）');
+    L.push('');
+    L.push('结论：文字渲染高度 ' + b4.h.toFixed(1) + 'px → ' + b5.h.toFixed(1) + 'px（×' +
+      (b5.h / b4.h).toFixed(1) + '），' + (b5.h >= 8 ? '达到可读' : '仍偏小') +
+      '；且横滑不产生页面级横向溢出。');
+    document.getElementById('out').textContent = L.join('\n');
+    document.title = 'PROBE2_DONE';
+   } catch (e) {
+    document.getElementById('out').textContent = 'ERROR: ' + e.message + '\n' +
+      String(e.stack || '').split('\n').slice(0, 5).join('\n');
+    document.title = 'PROBE2_ERR';
+   }
+  }, 1500);
+});
+</script>
+</body>
+</html>

@@ -1,0 +1,77 @@
+﻿<!DOCTYPE html>
+<html lang="zh-CN"><head><meta charset="utf-8"><title>PROBE4_DONE</title></head>
+<body>
+<pre id="out">视口 innerWidth=390  doc.clientWidth=375
+页面 scrollWidth=375  → 横向溢出=false
+body scrollWidth=375
+
+--- .figwrap ---
+  rect.width=281  offsetWidth=281
+--- .fig（横滑容器）---
+  rect.width=281  offsetWidth=281  clientWidth=279  scrollWidth=800
+  可横滑=true   is-scroll=true
+--- svg（内容）---
+  rect.width=800  style.width=800px
+  图内文字渲染高度=13.00px
+
+--- 超宽元素排查（rect.right &gt; 视口）---
+svg#sysmap w=800 right=848</pre>
+<iframe id="fr" style="width:390px;height:800px;border:1px solid #ccc" src="/viz/%E5%8E%9F%E7%90%86%E8%AE%B2%E8%A7%A3_4.0_%E4%BF%A1%E9%81%93%E7%9A%84%E5%AE%9A%E4%B9%89%E4%B8%8E%E5%88%86%E7%B1%BB_%E5%8F%AF%E8%A7%86%E5%8C%96.html"></iframe>
+<script>
+window.addEventListener('load', function () {
+  var NAME = '原理讲解_4.0_信道的定义与分类_可视化.html';
+  var fr = document.getElementById('fr');
+  fr.src = '/viz/' + encodeURIComponent(NAME);
+  setTimeout(function () {
+   try {
+    var L = [];
+    var doc = fr.contentDocument, win = fr.contentWindow;
+    L.push('视口 innerWidth=' + win.innerWidth + '  doc.clientWidth=' + doc.documentElement.clientWidth);
+    L.push('页面 scrollWidth=' + doc.documentElement.scrollWidth +
+           '  → 横向溢出=' + (doc.documentElement.scrollWidth > doc.documentElement.clientWidth + 1));
+    L.push('body scrollWidth=' + doc.body.scrollWidth);
+    var wrap = doc.querySelector('.figwrap');
+    var box = wrap && wrap.querySelector('.fig');
+    var svg = doc.getElementById('sysmap');
+    L.push('');
+    L.push('--- .figwrap ---');
+    L.push('  rect.width=' + Math.round(wrap.getBoundingClientRect().width) +
+           '  offsetWidth=' + wrap.offsetWidth);
+    L.push('--- .fig（横滑容器）---');
+    L.push('  rect.width=' + Math.round(box.getBoundingClientRect().width) +
+           '  offsetWidth=' + box.offsetWidth +
+           '  clientWidth=' + box.clientWidth +
+           '  scrollWidth=' + box.scrollWidth);
+    L.push('  可横滑=' + (box.scrollWidth > box.clientWidth + 1) +
+           '   is-scroll=' + (wrap.className.indexOf('is-scroll') >= 0));
+    L.push('--- svg（内容）---');
+    L.push('  rect.width=' + Math.round(svg.getBoundingClientRect().width) +
+           '  style.width=' + svg.style.width);
+    var t = svg.querySelector('text');
+    L.push('  图内文字渲染高度=' + t.getBoundingClientRect().height.toFixed(2) + 'px');
+    /* 页面里有没有元素把视口撑宽（逐个查） */
+    L.push('');
+    L.push('--- 超宽元素排查（rect.right > 视口）---');
+    var bad = [];
+    var all = doc.querySelectorAll('*');
+    for (var i = 0; i < all.length; i++) {
+      var el = all[i], r = el.getBoundingClientRect();
+      if (r.width > win.innerWidth + 1) {
+        bad.push(el.tagName.toLowerCase() + (el.id ? '#' + el.id : '') +
+          (el.className && typeof el.className === 'string' ? '.' + el.className.trim().split(/\s+/).join('.') : '') +
+          ' w=' + Math.round(r.width) + ' right=' + Math.round(r.right));
+      }
+    }
+    L.push(bad.length ? bad.slice(0, 12).join('\n') : '(无超宽元素)');
+    document.getElementById('out').textContent = L.join('\n');
+    document.title = 'PROBE4_DONE';
+   } catch (e) {
+    document.getElementById('out').textContent = 'ERROR: ' + e.message;
+    document.title = 'PROBE4_ERR';
+   }
+  }, 1800);
+});
+</script>
+
+
+</body></html>

@@ -1,0 +1,133 @@
+/* ============================================================================
+   移动端适配样式（build/mobile.css，由 build.js 内联进每个页面）
+   ----------------------------------------------------------------------------
+   背景：共享样式里 `svg{width:100%;height:auto}` 是**等比缩放**——
+   800×210 的框图在 390px 手机上只剩 281px 宽，缩放 0.35，
+   9.8px 的图内标注实际渲染只有 **3.4~5px**，完全看不清。
+
+   方案：宽图由 runtime（build/mobile.js）包进 .fig 横滑容器并按 **1:1** 渲染，
+        文字保持设计字号；容器内左右滑动看全图。
+   ⚠ 桌面端零影响：包裹动作只在「图宽 > 视口宽」时触发，
+     视口够宽时页面 DOM 与样式与改造前完全一致。
+
+   规则清单：
+     ① .figwrap/.fig     宽图横滑容器 + 滑动提示 + 两侧渐隐阴影
+     ② .tbl-wrap         表格横滑（窄屏下按内容宽度排版，不压扁列）
+     ③ 触控尺寸          pointer:coarse 时放大滑块/按钮
+     ④ .mvis-lb-*        点图全屏灯箱（双指缩放 / 拖动平移 / 双击放大）
+   ========================================================================== */
+
+/* ---------- ① 宽图横滑 ---------- */
+/* ⚠ min-width:0 / max-width:100% 不能省：
+   .figwrap 常处在 flex / grid 卡片里，而 flex 项的默认 min-width:auto 会让它
+   **不肯收缩到内容宽度以下** —— SVG 按 1:1 渲染后（如 902px 宽的框图），
+   容器不肯缩 → 卡片被撑到 902px → 整页被顶出横向滚动条。
+   允许收缩后，.fig 自己的 overflow-x:auto 接管横滑，页面不再溢出。 */
+.figwrap{margin:12px 0;min-width:0;max-width:100%;
+  /* contain:inline-size：让本盒子的**行内尺寸不再由内容决定** →
+     它在父级（grid/flex 卡片）里的 min-content 贡献降为 0。
+     ⚠ 这是关键的一步：grid 项默认 min-width:auto = 内容最小宽度，
+     1:1 渲染的宽图（如 432px 的 SVG）会把卡片撑到 470px → 整页横向溢出。
+     min-width:0 只能让**自己**收缩，压不住父级由内容撑开的宽度。 */
+  contain:inline-size;
+}
+.fig{
+  overflow-x:auto;overflow-y:hidden;-webkit-overflow-scrolling:touch;
+  background:#fff;border:1px solid var(--bd,#d8d8d2);border-radius:8px;
+  scrollbar-width:thin;min-width:0;max-width:100%;
+}
+.fig>svg{
+  width:auto;max-width:none;display:block;margin:0 auto;
+  background:#fff;border-radius:0;
+}
+/* 可横滑时两侧加渐隐阴影，提示「还有内容」 */
+.figwrap.is-scroll>.fig{
+  box-shadow:inset 16px 0 14px -16px rgba(0,0,0,.30),
+             inset -16px 0 14px -16px rgba(0,0,0,.30);
+}
+.fighint{display:none;font-size:12px;color:var(--mut,#6b6b6b);text-align:center;margin-top:6px;}
+.figwrap.is-scroll>.fighint{display:block;}
+/* 提示条上的「放大」按钮 */
+.fighint button{
+  font:inherit;font-size:12px;margin:0 0 0 10px;padding:3px 10px;
+  border:1px solid var(--bd,#d8d8d2);border-radius:12px;background:#fff;color:var(--blue,#1a46b5);
+  vertical-align:baseline;
+}
+
+/* ---------- ①·b grid / flex 子项允许收缩 ----------
+   grid 项与 flex 项的默认 min-width:auto = **内容最小宽度**，
+   里面放了 1:1 渲染的宽图（SVG 宽 778px）时，项不肯缩到轨道宽以下 →
+   卡片被撑破 → 整页横向滚动条。
+   下面的容器清单由 scratch/survey_grid_classes.js 从发布目录**实测**得出
+   （谁声明了 display:grid/flex 就收谁），不是拍脑袋写的。 */
+.grid2>*,.grid3>*,.grid4>*,.grid>*,.grid12>*,.grid21>*,.irow>*,
+.cols2>*,.cols3>*,.readout>*,.meta>*,.ctrls>*,.ctrl .row>*,.steps>*,
+.legend>*,.frac>*,.badge-row>*,.eyebrow>*,.meta-row>*,.sec-head>*,
+.purpose>*,.widget-h>*,.btnrow>*,.flow>*,.kv>*,.readouts>*,.item>*,
+.buttons>*,.tabs>*,.presets>*,.symrow>*,.wave-trio>*,.bench>*{min-width:0}
+
+/* ---------- ② 表格横滑 ---------- */
+/* 章节样式里通常已有 .tbl-wrap；这里补一份兜底，
+   窄屏下让表格按内容宽度排布（不把列压成一条缝），超宽时横滑。 */
+.tbl-wrap{overflow-x:auto;-webkit-overflow-scrolling:touch;min-width:0;max-width:100%;}
+@media (max-width:760px){
+  .tbl-wrap>table{width:max-content;min-width:100%;}
+}
+
+/* ---------- ②·b Canvas 自适应 ----------
+   canvas 用 width/height **属性**定死像素尺寸（如 width="640"），
+   在窄屏上就是一块不肯收缩的替换元素 → 连带把卡片与整页撑破
+   （实测某页 canvas 432px 宽，卡片被撑到 470px）。
+   max-width:100% + height:auto 让它等比缩小（只改显示尺寸，
+   不动画布的绘制分辨率，页面脚本读 canvas.width 不受影响）。 */
+canvas{max-width:100%;height:auto;}
+
+/* ---------- ③ 触控尺寸 ---------- */
+@media (pointer:coarse){
+  input[type=range]{height:34px;margin:2px 0;}
+  input[type=range]::-webkit-slider-thumb{width:26px;height:26px;}
+  input[type=range]::-moz-range-thumb{width:26px;height:26px;border:0;}
+  button{min-height:40px;padding:9px 18px;}
+  .ctrl .val{font-size:15px;}
+  .fighint{font-size:12.5px;}
+}
+
+/* ---------- ④ 全屏灯箱 ---------- */
+.mvis-lb{
+  position:fixed;inset:0;z-index:99999;background:rgba(10,14,24,.96);
+  display:none;flex-direction:column;touch-action:none;overscroll-behavior:contain;
+}
+.mvis-lb.on{display:flex;}
+.mvis-lb-stage{
+  flex:1 1 auto;overflow:hidden;position:relative;
+  display:flex;align-items:center;justify-content:center;
+}
+.mvis-lb-zoom{
+  width:100%;height:100%;display:flex;align-items:center;justify-content:center;
+  transform-origin:center center;will-change:transform;
+}
+.mvis-lb-zoom>svg{
+  width:100%;height:100%;max-width:none;max-height:none;
+  background:transparent;border-radius:0;
+}
+.mvis-lb-bar{
+  display:flex;flex-wrap:wrap;gap:8px;align-items:center;justify-content:center;
+  padding:10px 12px calc(10px + env(safe-area-inset-bottom));
+  background:#101828;color:#e8eef9;font-size:14px;
+}
+.mvis-lb-bar button{
+  background:#1e2c47;color:#e8eef9;border:1px solid #34456b;border-radius:8px;
+  min-width:46px;min-height:42px;margin:0;padding:8px 14px;font-size:16px;
+}
+.mvis-lb-bar button:active{background:#2a3c60;}
+.mvis-lb-tip{width:100%;text-align:center;color:#93a4c4;font-size:12px;}
+.mvis-lb-x{
+  position:absolute;top:8px;right:10px;z-index:2;
+  background:rgba(30,44,71,.9);color:#e8eef9;border:1px solid #34456b;
+  border-radius:8px;min-width:42px;min-height:42px;margin:0;font-size:18px;
+}
+/* 桌面端灯箱按钮不需要那么大的触控区 */
+@media (pointer:fine){
+  .mvis-lb-bar button{min-height:34px;font-size:14px;padding:6px 12px;}
+  .mvis-lb-x{min-height:34px;min-height:34px;}
+}

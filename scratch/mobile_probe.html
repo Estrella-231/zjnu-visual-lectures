@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<title>mobile probe</title>
+</head>
+<body>
+<pre id="out">running…</pre>
+<iframe id="fr" style="width:390px;height:600px;border:1px solid #ccc"></iframe>
+<script>
+/* 在 390px 视口里量真实版式：文档总宽、视口宽、超宽元素清单 */
+window.addEventListener('load', function () {
+  var NAME = '原理讲解_4.0_信道的定义与分类_可视化.html';
+  document.getElementById('fr').src = '/viz/' + encodeURIComponent(NAME);
+  setTimeout(function () {
+    var fr = document.getElementById('fr');
+    var doc = fr.contentDocument;
+    var win = fr.contentWindow;
+    var lines = [];
+    lines.push('innerWidth      = ' + win.innerWidth);
+    lines.push('clientWidth     = ' + doc.documentElement.clientWidth);
+    lines.push('scrollWidth     = ' + doc.documentElement.scrollWidth);
+    lines.push('scrollHeight    = ' + doc.documentElement.scrollHeight);
+    lines.push('body.scrollWidth = ' + doc.body.scrollWidth);
+    lines.push('横向溢出        = ' + (doc.documentElement.scrollWidth > doc.documentElement.clientWidth + 1));
+    lines.push('--- 超宽元素（> 视口宽）---');
+    var all = doc.querySelectorAll('*');
+    var bad = [];
+    for (var i = 0; i < all.length; i++) {
+      var el = all[i];
+      var r = el.getBoundingClientRect();
+      if (r.width > win.innerWidth + 1 || r.right > win.innerWidth + 1) {
+        bad.push(el.tagName.toLowerCase() +
+          (el.id ? '#' + el.id : '') +
+          (el.className && typeof el.className === 'string' ? '.' + el.className.trim().split(/\s+/).join('.') : '') +
+          '  w=' + Math.round(r.width) + ' right=' + Math.round(r.right) +
+          '  text=' + (el.textContent || '').trim().slice(0, 28));
+      }
+    }
+    lines.push(bad.length ? bad.slice(0, 25).join('\n') : '(无超宽元素)');
+    lines.push('--- 图与文字实测缩放 ---');
+    var svgs = doc.querySelectorAll('svg');
+    for (var j = 0; j < svgs.length && j < 8; j++) {
+      var s = svgs[j];
+      var rr = s.getBoundingClientRect();
+      var vb = s.getAttribute('viewBox');
+      var sc = vb ? (rr.width / parseFloat(vb.split(/\s+/)[2])) : 1;
+      var t = s.querySelector('text');
+      var fs = t ? (t.getAttribute('font-size') || t.style.fontSize || '') : '';
+      lines.push('svg#' + (s.id || '(no-id)') + '  显示宽=' + Math.round(rr.width) +
+        '  viewBox=' + vb + '  缩放=' + (Math.round(sc * 100) / 100) +
+        '  原始字号=' + fs + (fs ? ' → 实际≈' + (parseFloat(fs) * sc).toFixed(1) + 'px' : ''));
+    }
+    document.getElementById('out').textContent = lines.join('\n');
+    document.title = 'PROBE_DONE';
+  }, 1200);
+});
+</script>
+</body>
+</html>
