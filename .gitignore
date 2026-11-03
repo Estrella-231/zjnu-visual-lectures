@@ -22,6 +22,11 @@ site/
 viz/
 *.log
 
+# --- 部署用源码包（scratch/make_source_bundle.js 生成） ---
+# 只含 git 跟踪文件，体积 0.6 MB；deploy 的源码归档包只收这一份，
+# 避免 docs/(140 MB) + build/pages/(67 MB) 撞上 200 MB 归档上限。
+.deploy-src/
+
 # --- 脚本中间产物 / 截图 / 诊断输出 ---
 scratch/_*.html
 scratch/_*.txt

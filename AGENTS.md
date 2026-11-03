@@ -211,6 +211,11 @@ node build/publish.js                # ⑨（可选）组装公网发布目录 s
 | `VERIFY_PORT` 选的端口**已被别的服务占用** | 症状同上：端口被占 → `serve.js` 起不来 → iframe 加载的是**别人的服务** → 全页「页面可能未加载」 | 选端口前先查：`Get-NetTCPConnection -State Listen \| Where LocalPort -ge 18076`；本机常见占用：18076（本工程预览）、18077（通信电路）、18078、**18098（小红书 MCP 的 `tools/serve.js`）** |
 | `check_online.js` 遇到大文件就**静默卡住** | 原实现为了省流量，在响应流超过 400 KB 时 `res.destroy()`，但 `resolve` 只挂在 `'end'` 事件上 → destroy 后 `end` 不触发 → 该请求**永远不返回** → 脚本停在那一个文件上（症状：只输出前几个 URL 就没了，**看起来像"线上只有几个文件"**） | 不要在中途 destroy 响应流；要么读完整个流，要么同时监听 `'close'`/`'error'` 并保证只 resolve 一次（已修）。判据：**输出行数应等于本地文件数**，少于它就是卡住了，不是线上缺文件 |
 | PortableGit 的 `helper-selector` 拦在凭据链最前 | 全局 `~/.gitconfig` 里有 `credential.helperselector.selected=manager` → `git push` 弹「CredentialHelperSelector」选择窗口**卡住不返回**；且 `git config --global --get-all credential.helper` **查不到它**（它不是 helper 项） | 本仓库 `.git/config` 里显式写 `credential.helper = <GCM绝对路径>`；若仍被弹窗，用 `GIT_CONFIG_GLOBAL=<临时配置文件>` 隔离全局配置再推（不改全局）。PortableGit 的 GCM 在 `mingw64/bin/git-credential-manager.exe`（2.7.3 可用）；`gh` CLI 本机没装 |
+| 部署时源码归档包撞 200 MB 上限 | `website_deploy` 的 `source_path` 传工程根 → 把 `docs/`（教材 PDF 140 MB）+ `build/pages/`（扫描页图 67 MB）一起打包 → 报「Source directory total size exceeds the source archive limit」 | `source_path` 改传 `scratch/make_source_bundle.js` 生成的 `.deploy-src/`（只含 `git ls-files -co --exclude-standard` 的文件，0.6 MB）；`path` 仍传 `site/`。该目录已进 `.gitignore` |
+| `txt()` 里塞 `<b>` 标签被当字面显示 | SVG 文本助手 `txt()` 走 `textContent`，HTML 标签原样打印成「产生方法<b>不写进体制名</b>」 | SVG 文本**不放 HTML 标签**；要强调就用两次 `txt()` 分段画，或改 `innerHTML`（但那会引入 XSS 面） |
+| `a-b%c` 被解析成 `a-(b%c)` | `(bits-1)%1` 写成 `bits-1%1` → 运算符优先级让 `%` 先于 `-` 绑定 → 条件恒真 → 小数点多显示两位 | 取模一律加括号 `(bits-1)%1`；改完用真 Chrome 点一遍读数回读，别只看代码 |
+| 拼 URL 多一个斜杠导致全站 404 | `BASE` 末尾已有 `/`，再拼 `'/'+path` → `//tongxin-yuanli/...` → 线上 404（本地文件其实都在） | 拼 URL 前先确认 BASE 尾部；脚本里统一 `BASE.replace(/\/+$/,'')` 再拼 `'/'+path` |
+| PowerShell 把 UTF-8 页面按 GBK 解码 | `Invoke-WebRequest` 取到的中文全是乱码 → 字符串匹配 `indexOf('中文')` 恒为 -1 → 误判「线上没这段内容」 | 核对线上中文内容一律用 Node 按 `Buffer.toString('utf8')` 解码；PowerShell 只用来取状态码 |
 
 ## 12. worker 可做 / 不可做
 
