@@ -24,8 +24,11 @@ function sh(cmd, args) {
   const errs = r.out.split(/\r?\n/).filter(l => /^\[ERROR:/i.test(l) || /Uncaught/i.test(l));
   console.log('SVG 渲染数: ' + (dom.match(/<svg[\s>]/gi) || []).length);
   console.log('w14 体制名文本: ' + (dom.match(/>(2ASK|2FSK|2PSK|MASK|MFSK|MPSK|QPSK)</g) || []).slice(0, 6).join(' '));
-  console.log('维度表: ' + (dom.indexOf('信号参量有') >= 0 ? '在' : '缺'));
+  console.log('三件事对照表: ' + (dom.indexOf('这件事') >= 0 && dom.indexOf('在管什么') >= 0 ? '在' : '缺'));
   console.log('callout: ' + (dom.indexOf('最容易混的一点') >= 0 ? '在' : '缺'));
+  console.log('预备概念区: ' + (dom.indexOf('先别急着往下看') >= 0 ? '在' : '缺'));
+  console.log('五个预备概念: ' + ['载波（carrier）','基带（baseband）','码元（symbol）','相干 / 非相干','误码率（Pe）']
+      .map(k => dom.indexOf(k) >= 0 ? '✓' : '✗').join(' '));
   console.log('两张对照卡: ' + (dom.match(/class="card"/g) || []).length + ' 个 .card');
   console.log('console 错误: ' + errs.length);
   errs.slice(0, 5).forEach(e => console.log('   ' + e.slice(0, 200)));
